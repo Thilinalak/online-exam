@@ -1,6 +1,33 @@
 import { Row, Col, Container, Form, Button, Table } from "react-bootstrap";
 
 export const Exams = () => {
+  const examData = [
+    {
+      id: 1,
+      exmname: "IT",
+      lastUpdate: "2022-06-22 10.00am",
+      status: "Draft",
+    },
+    {
+      id: 2,
+      exmname: "maths",
+      lastUpdate: "2022-06-23 10.00am",
+      status: "Pending",
+    },
+    {
+      id: 3,
+      exmname: "English",
+      lastUpdate: "2022-06-24 10.00am",
+      status: "Pending",
+    },
+    {
+      id: 4,
+      exmname: "Bio",
+      lastUpdate: "2022-06-24 2.00pm",
+      status: "Draft",
+    },
+  ];
+
   return (
     <>
       <Container style={{ paddingTop: 100 }}>
@@ -21,11 +48,8 @@ export const Exams = () => {
           </Col>
           <Col sm={4}>
             <div>
-            <Button  variant="success">
-              New Exam
-            </Button>
+              <Button variant="success">New Exam</Button>
             </div>
-            
           </Col>
         </Row>
 
@@ -39,16 +63,16 @@ export const Exams = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>IT</td>
-                <td>2022-06-22 10.00pm</td>
-                <td>Draft</td>
-              </tr>
-              <tr>
-                <td>Maths</td>
-                <td>2022-06-21 11.00pm</td>
-                <td>Pending</td>
-              </tr>
+              {examData.map((exam) => {
+                return (
+                  <tr key={exam.id}>
+                    <td>{exam.exmname}</td>
+                    <td>{exam.lastUpdate}</td>
+                    <td>{exam.status}</td>
+                  </tr>
+                );
+              })}
+             
             </tbody>
           </Table>
         </div>
