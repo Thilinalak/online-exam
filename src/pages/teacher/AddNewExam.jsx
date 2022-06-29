@@ -15,7 +15,7 @@ export const AddNewExam = () => {
       <section className="p-5">
         <Row>
           <Col xs={12} md={8}>
-            <div className="pt-5 p-4">
+            <div className="pt-5">
               <h5>Question List</h5>
               <Table striped bordered hover>
                 <thead>
@@ -26,8 +26,14 @@ export const AddNewExam = () => {
                 </thead>
                 <tbody>
                   <tr>
-                    <td>asdjf iahsf ia sfdoia ioajsd o oiasd ohj oiashd oashj oiahdsoias oihj  oaisdad  oijhad ad</td>
-                    <td>answer, answeranswer, answeranswer, answeranswer, answeranswer, answer</td>
+                    <td>
+                      asdjf iahsf ia sfdoia ioajsd o oiasd ohj oiashd oashj
+                      oiahdsoias oihj oaisdad oijhad ad
+                    </td>
+                    <td>
+                      answer, answeranswer, answeranswer, answeranswer,
+                      answeranswer, answer
+                    </td>
                   </tr>
                   <tr>
                     <td>Maths</td>
@@ -36,40 +42,11 @@ export const AddNewExam = () => {
                 </tbody>
               </Table>
             </div>
-            <div className="p-4" style={{ position: "absolute", bottom: 0 }}>
-              <MuiPickersUtilsProvider  utils={DateFnsUtils}>
-                <KeyboardDateTimePicker 
-                  ampm={false}
-                  label="Exam Date and Time"
-                  inputVariant="filled"
-                  value={selectedDate}
-                  onChange={handleDateChange}
-                  onError={console.log}
-                  disablePast
-                  showTodayButton
-                  format="yyyy/MM/dd HH:MM"
-                />
-                <TimePicker
-                  inputVariant="filled"
-                  label="Exam Duration"
-                  ampm={true}
-                  value={selectedDate}
-                  onChange={handleDateChange}
-                />
-              </MuiPickersUtilsProvider>
-              <Button variant="success" className="m-3">
-                Save
-              </Button>
-              <Button variant="danger" className="">
-                Publish Paper
-              </Button>
-            </div>
 
-            <div></div>
           </Col>
-          <Col xs={6} md={4}>
-            <Card className="p-3">
-              <Form className="p-1">
+          <Col md={4} className="pt-5">
+            <Card border="success" className="p-3">
+              <Form className="">
                 <Form.Group className="p-3">
                   <Form.Label>Question</Form.Label>
                   <Form.Control
@@ -117,6 +94,38 @@ export const AddNewExam = () => {
                 </Form.Group>
               </Form>
             </Card>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <div className="p-4">
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <KeyboardDateTimePicker
+                  ampm={false}
+                  label="Exam Date and Time"
+                  inputVariant="filled"
+                  value={selectedDate}
+                  onChange={handleDateChange}
+                  onError={console.log}
+                  disablePast
+                  showTodayButton
+                  format="yyyy/MM/dd HH:MM"
+                />
+                <TimePicker
+                  inputVariant="filled"
+                  label="Exam Duration"
+                  ampm={true}
+                  value={selectedDate}
+                  onChange={handleDateChange}
+                />
+              </MuiPickersUtilsProvider>
+              <Button variant="success" className="m-3">
+                Save
+              </Button>
+              <Button variant="danger" className="">
+                Publish Paper
+              </Button>
+            </div>
           </Col>
         </Row>
       </section>

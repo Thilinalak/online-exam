@@ -47,7 +47,7 @@ export const Exams = () => {
             </Form>
           </Col>
           <Col sm={4}>
-            <div>
+            <div className="float-end">
               <Button variant="success">New Exam</Button>
             </div>
           </Col>
