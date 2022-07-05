@@ -1,6 +1,9 @@
 import { Row, Col, Container, Form, Button, Table } from "react-bootstrap";
+import {useNavigate} from 'react-router-dom'
 
 export const Exams = () => {
+
+  const navigate = useNavigate()
   const examData = [
     {
       id: 1,
@@ -48,7 +51,7 @@ export const Exams = () => {
           </Col>
           <Col sm={4}>
             <div className="float-end">
-              <Button variant="success">New Exam</Button>
+              <Button onClick={() => navigate("/add-new-exam")} variant="success">New Exam</Button>
             </div>
           </Col>
         </Row>

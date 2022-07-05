@@ -1,29 +1,34 @@
 import Login from "./pages/Login";
 // import { Dashboard } from './pages/teacher/Dashboard';
-import { Exams } from "./pages/teacher/Exams";
+import { Exams as TeacherExams } from "./pages/teacher/Exams";
 import { MonitorStartedExam } from "./pages/teacher/MonitorStartedExam";
-// import { Exams } from './pages/student/Exams';
+import { Exams as StudentExam } from "./pages/student/Exams";
 import { AddNewExam } from "./pages/teacher/AddNewExam";
-import {ExamResults} from './pages/student/ExamResults'
-import {SingleExam} from './pages/student/SingleExam'
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
-
+import { ExamResults } from "./pages/student/ExamResults";
+import { SingleExam } from "./pages/student/SingleExam";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
+import { ToastContainer } from "react-toastify";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <div>
-        {/* <Login/> */}
-        {/* <Dashboard/> */}
-        {/* <Exams/> */}
-        {/* <AddNewExam /> */}
-        {/* <MonitorStartedExam/> */}
-        {/* <ExamResults/> */}
-        <SingleExam/>
-      </div>
+    <Router>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <div>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/teacher-exams" element={<TeacherExams />} />
+            <Route path="/student-exams" element={<StudentExam />} />
+            <Route path="/add-new-exam" element={<AddNewExam />} />
+          </Routes>
+          <ToastContainer />
+        </div>
       </MuiPickersUtilsProvider>
+    </Router>
   );
 }
 
 export default App;
+
