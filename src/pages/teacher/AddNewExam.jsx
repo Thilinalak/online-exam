@@ -8,24 +8,27 @@ import {
 } from "@material-ui/pickers";
 import ExamTable from "../../components/ExamTable";
 import { useNavigate } from "react-router-dom";
+import { Header } from "../../components/Header"
 
 export const AddNewExam = () => {
   const navigate = useNavigate();
 
-  const initials = {};
-
   const [selectedDate, handleDateChange] = useState(new Date());
+
   const [formData, setFormData] = useState({
-    question: "",
-    answer1: "",
-    answer2: "",
-    answer3: "",
-    answer4: "",
-  });
+    question:'dsdsds',
+    answers:[
+      {answer1:'sdsd', iscorrect:false},
+      {answer2:'ddd', iscorrect:true},
+      {answer3:'ddd', iscorrect:false},
+      {answer4:'dd', iscorrect:false},
+    ]
+  },
+  );
 
   const [tableData, setTableData] = useState([]);
 
-  const { examname, question, answer1, answer2, answer3, answer4 } = formData;
+  const { question, answer1, answer2, answer3, answer4 } = formData;
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -54,21 +57,13 @@ export const AddNewExam = () => {
 
   return (
     <>
+    <Header/>
       <section className="p-5">
         <Row>
           <Col xs={12} md={8}>
-            <div className="pt-5">
-              <h3 className="pb-3">Exam Name</h3>
-              <h5>Question List</h5>
-              <ExamTable tableData={tableData} />
-            </div>
-          </Col>
-          <Col md={4} className="pt-5">
-            <Card border="success" className="p-3">
-              <Form onSubmit={onSubmit} className="">
-                <Form.Group className="p-3">
-                  <Form.Label>Exam Name </Form.Label>
-                  <Form.Control
+            <div className="pt-1">
+              <div className="pb-3">
+              <Form.Control
                     type="text"
                     id="examname"
                     placeholder="Enter Exam Name"
@@ -77,7 +72,15 @@ export const AddNewExam = () => {
                     value={formData.examname}
                     required="required"
                   />
-                </Form.Group>
+              </div>
+              
+              <h5>Question List</h5>
+              <ExamTable tableData={tableData} />
+            </div>
+          </Col>
+          <Col md={4} className="pt-1">
+            <Card border="success" className="p-3">
+              <Form onSubmit={onSubmit} className="">
                 <Form.Group className="p-3">
                   <Form.Label>Question</Form.Label>
                   <Form.Control

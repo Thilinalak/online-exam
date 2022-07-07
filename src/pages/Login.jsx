@@ -1,13 +1,28 @@
 import { Button, Form, Container, Card } from "react-bootstrap";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from 'axios'
 import {  toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom'
-
+import { useSelector , useDispatch} from 'react-redux'
+import { login , reset} from '../feature/authSlice'
 
 const Login = () => {
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const {user, isSuccess, isError, message} = useSelector((state) => state.auth)
+
+  useEffect(()=>{
+    if(isError){
+      toast.error(message)
+    }
+    if(isSuccess || user){
+      navigate('/teacher-exams')
+    }
+    dispatch(reset())
+  },[user, isError, isSuccess, message, navigate, dispatch])
+
   const [loginData, setLoginData] = useState({
     email: '',
     password: ''
@@ -25,21 +40,29 @@ const Login = () => {
 
   const onSubmit = (e) => {
     e.preventDefault()
-    axios.post('http://localhost:5000/login', {
-      username: email,
-      password: password,
-    }).then((respose) =>{
-        if(respose.data.message){
-          toast.error(respose.data.message)
-        }else{
-          const userType = respose.data[0].user_type
-          if(userType === 'student'){
-            navigate('/student-exams')
-          }else{
-            navigate('/teacher-exams')
-          }
-        }
-    })
+    
+    const userData = {
+      email,
+      password
+    }
+    dispatch(login(userData))
+    // axios.post('http://localhost:5000/login', {
+    //   username: email,
+    //   password: password,
+    // }).then((respose) =>{
+    //     if(respose.data.message){ 
+    //       toast.error(respose.data.message)
+    //     }else{
+    //       console.log(respose.data)
+          // localStorage.setItem('user', JSON.stringify(respose.data))
+    //       const userType = respose.data[0].user_type
+    //       if(userType === 'student'){
+    //         navigate('/student-exams')
+    //       }else{
+    //         navigate('/teacher-exams')
+    //       }
+    //     }
+    // })
   }
 
   return (

@@ -1,5 +1,7 @@
 import { Row, Col, Container, Form, Button, Table } from "react-bootstrap";
 import {useNavigate} from 'react-router-dom'
+import { Header } from "../../components/Header"
+
 
 export const Exams = () => {
 
@@ -30,9 +32,10 @@ export const Exams = () => {
       status: "Draft",
     },
   ];
-
+console.log(examData)
   return (
     <>
+    <Header/>
       <Container style={{ paddingTop: 100 }}>
         <Row>
           <Col sm={8}>

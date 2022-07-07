@@ -1,8 +1,9 @@
 import { Row, Col, Container, Form, Button, Table } from "react-bootstrap";
-
+import { Header } from "../../components/Header"
 export const Exams = () => {
   return (
     <>
+    <Header/>
       <Container style={{ paddingTop: 100 }}>
         <Row>
           <Col sm={8}>
