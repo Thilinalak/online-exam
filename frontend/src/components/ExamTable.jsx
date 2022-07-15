@@ -16,18 +16,15 @@ export default function ExamTable({tableData}) {
                     return(
                       <tr key={index}>
                       <td>{data.question}</td>
-                      <td>{data.answer1} | {data.answer2} | {data.answer3} | {data.answer4} </td>
+                      <td>1. {data.answers[0]} 2. {data.answers[1]} 3. {data.answers[2]} 4. {data.answers[3]} </td>
                     </tr>
                     )
                   })}
-                  
-                  <tr>
-                    <td>Maths</td>
-                    <td>answer, answeranswer</td>
-                  </tr>
                 </tbody>
               </Table>
+             
     </div>
+    
   )
 }
 

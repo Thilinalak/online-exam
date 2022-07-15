@@ -1,9 +1,20 @@
 import { Row, Col, Container, Form, Button, Table } from "react-bootstrap";
 import {useNavigate} from 'react-router-dom'
 import { Header } from "../../components/Header"
+import { useState, useEffect } from "react";
+import axios from 'axios'
+
 
 
 export const Exams = () => {
+
+  useEffect(() =>{
+
+    axios.get('http://localhost:5000/exam/teacher-view-exam').
+    then((res) =>{
+      
+    })
+  }, [])
 
   const navigate = useNavigate()
   const examData = [
