@@ -1,11 +1,5 @@
-import {
-  Row,
-  Form,
-  Col,
-  Button,
-  Card,
-} from "react-bootstrap";
-import { useState,useEffect } from "react";
+import { Row, Form, Col, Button, Card } from "react-bootstrap";
+import { useState, useEffect } from "react";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   TimePicker,
@@ -13,35 +7,37 @@ import {
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import ExamTable from "../../components/ExamTable";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Header } from "../../components/Header";
 import { Formik, Form as FormikForm, Field } from "formik";
 import axios from "axios";
 
 export const AddNewExam = () => {
   const navigate = useNavigate();
-
+  const location = useLocation();
   const [selectedDateTime, setSelectedDataTime] = useState(new Date());
-  const [duration, setDuration] = useState('')
-  const [examName, setExamName] = useState('')
-  const [currentUser, setCurrentUser] = useState([])
+  const [duration, setDuration] = useState("");
+  const [examName, setExamName] = useState("");
+  const [currentUser, setCurrentUser] = useState([]);
+  const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
       setCurrentUser(user);
     }
+    const examID = location?.state?.examid
+    setExamName(location?.state?.examname)
+    setSelectedDataTime(location?.state?.datetime)
+    setDuration(location?.state?.duration)
+
+    axios.get(`http://localhost:5000/exam/questions-answers/${examID}`)
+    .then((res) => {
+      console.log('QA RES',res.data);
+    })
   }, []);
-  const [tableData, setTableData] = useState([]);
-  
-  // const [examData, setExamData] = useState({
-  //   examname: '',
-  //   duration: '',
-  // });
 
-
-  // const { examname, duration} = examData;
-
+ 
   // const onChange = (e) => {
   //   setExamData((prevState) => ({
   //     ...prevState,
@@ -49,26 +45,50 @@ export const AddNewExam = () => {
   //   }));
   // };
 
-  const onSubmit = (e) => {
+  const onSave = (e) => {
     e.preventDefault();
 
-    const id = currentUser[0].iduser_login
-    console.log('data ', examName + ' ' + selectedDateTime+ " " +duration + ' '+ id + ' array '+tableData);
+    const id = currentUser[0].iduser_login;
+    console.log(
+      "data ",
+      examName +
+        " " +
+        selectedDateTime +
+        " " +
+        duration +
+        " " +
+        id +
+        " array " +
+        tableData
+    );
 
     const alldata = {
-      examName, selectedDateTime, duration, id, tableData
-    }
-    axios.post('http://localhost:5000/exam/add-new-exam',(alldata)).then(res =>{
-      console.log(res);
-      if(res.status === 200){
-        navigate('/teacher-exams')
-      }
-    })
+      examName,
+      selectedDateTime,
+      duration,
+      id,
+      tableData,
+    };
+    axios
+      .post("http://localhost:5000/exam/add-new-exam", alldata)
+      .then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          navigate("/teacher-exams");
+        }
+      });
     const clearTextFields = {
       examName: "",
     };
     // setExamName(clearTextFields);
   };
+
+  const onPublish = () =>{
+    axios.put('http://localhost:5000/exam/exam-publish')
+    .then((res)=>{
+
+    })
+  } 
 
   return (
     <>
@@ -83,7 +103,7 @@ export const AddNewExam = () => {
                   id="examname"
                   placeholder="Enter Exam Name"
                   name="examname"
-                  onChange={(e)=>setExamName (e.target.value)}
+                  onChange={(e) => setExamName(e.target.value)}
                   value={examName}
                   required="required"
                 />
@@ -99,8 +119,7 @@ export const AddNewExam = () => {
                 initialValues={{
                   question: "",
                   correctAnswer: "",
-                  answers: ['','','',''
-                  ],
+                  answers: ["", "", "", ""],
                 }}
                 onSubmit={(value, { resetForm }) => {
                   console.log(value);
@@ -110,7 +129,7 @@ export const AddNewExam = () => {
                   // resetForm()
                 }}
               >
-                {({ values , errors, touched}) => (
+                {({ values, errors, touched }) => (
                   <FormikForm>
                     <Form.Group className="p-3">
                       <Form.Label>Question</Form.Label>
@@ -123,7 +142,6 @@ export const AddNewExam = () => {
                         required="required"
                         as={Form.Control}
                       />
-                     
                     </Form.Group>
                     <Form.Group className="p-3">
                       <Form.Label>Answers List</Form.Label>
@@ -146,7 +164,6 @@ export const AddNewExam = () => {
                             required="required"
                             as={Form.Control}
                           />
-                          
                         </Col>
                       </Row>
                       <Row className="pt-2">
@@ -238,17 +255,17 @@ export const AddNewExam = () => {
                   showTodayButton
                   format="yyyy/MM/dd HH:mm"
                 />{" "}
-                <select onChange={(e)=> setDuration(e.target.value)}>
+                <select onChange={(e) => setDuration(e.target.value)}>
                   <option value="1 Hr">1 hr</option>
                   <option value="1 Hr 30min">1 hr 30min</option>
                   <option value="2 Hr">2 hr</option>
                   <option value="2 Hr 30min">2 hr 30min</option>
                 </select>
               </MuiPickersUtilsProvider>
-              <Button onClick={onSubmit} variant="success" className="m-3">
+              <Button onClick={onSave} variant="success" className="m-3">
                 Save
               </Button>
-              <Button variant="danger" className="">
+              <Button onClick={onPublish} variant="danger" className="">
                 Publish Paper
               </Button>
             </div>

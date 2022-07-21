@@ -1,4 +1,7 @@
 import { Button, Row, Col, Form, Card, Container } from "react-bootstrap";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const styles = {
   btnpadding: {
@@ -14,6 +17,24 @@ const styles = {
 };
 
 export const SingleExam = () => {
+
+  const [duration, setDuration] = useState("");
+  const [examName, setExamName] = useState("");
+  const [currentUser, setCurrentUser] = useState([]);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      setCurrentUser(user);
+    }
+    const examID = location?.state?.examid
+    setExamName(location?.state?.examname)
+    setDuration(location?.state?.duration)
+    axios.get(`http://localhost:5000/exam/questions-answers/${examID}`)
+  }, []);
+
   return (
     <Container style={styles.center}>
       <div className="text-center">

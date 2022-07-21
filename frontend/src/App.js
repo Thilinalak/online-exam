@@ -22,6 +22,8 @@ function App() {
             <Route path="/teacher-exams" element={<TeacherExams />} />
             <Route path="/student-exams" element={<StudentExam />} />
             <Route path="/add-new-exam" element={<AddNewExam />} />
+            <Route path="/Monitor-Started-Exam" element={<MonitorStartedExam />} />
+            <Route path="/student-single-exam" element={<SingleExam />} />
           </Routes>
           <ToastContainer />
         </div>
