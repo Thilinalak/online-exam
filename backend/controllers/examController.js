@@ -10,7 +10,7 @@ const db = mysql.createConnection({
 });
 
 //add new exam
-//@Route /exam/add-new-exam
+//@Route POST /exam/add-new-exam
 const addNewExam = (req, res) => {
   const lastUpdatedDateTime = new Date().toLocaleString();
 
@@ -64,10 +64,11 @@ const saveQuestions = (examID, tableData) => {
 };
 
 const saveAnswers = (questionID, answers) => {
+
   answers.map((answerData) => {
     db.query(
       "INSERT INTO answers (answer, aquestion_id) VALUES (?,?)",
-      [answerData, questionID],
+      [answerData.answer, questionID],
       (err, result) => {
         if (err) {
           console.log(err);
@@ -78,7 +79,7 @@ const saveAnswers = (questionID, answers) => {
 };
 
 // Teacher View Exams
-//@Route /exam/teacher-view-exam
+//@Route GET /exam/teacher-view-exam
 const teacherViewExams = (req, res) => {
   db.query(
     "SELECT idexam, exam_name,datetime,duration, last_updated, status FROM exam WHERE teacher_idteacher = ?",
@@ -91,7 +92,7 @@ const teacherViewExams = (req, res) => {
 
 
 // Publish exam
-// @Route /exam/add-new-exam
+// @Route PUT /exam/add-new-exam
 const pubishExam = (req, res) =>{
   console.log('got the request');
 }
@@ -99,7 +100,7 @@ const pubishExam = (req, res) =>{
 
 
 // Student View Exams
-// @Route /exam/student-view-exam
+// @Route GET /exam/student-view-exam
 const studentViewExams = (req, res) => {
   db.query(
     `SELECT idexam, exam_name, datetime , duration , isAttended FROM exam WHERE student_status = ${true} AND isPublished = ${true}`,
@@ -110,10 +111,9 @@ const studentViewExams = (req, res) => {
 };
 
 // GET Questions and answers
-//@Route /exam/questions-answers
+//@Route GET /exam/questions-answers
 const questionsAnswers = (req, res) => {
   const examID = req.params.id;
-
   db.query(`SELECT q.*, a.* FROM question q
     JOIN answers a ON
     q.question_id = a.aquestion_id WHERE q.exam_id = ${examID}`,
@@ -132,14 +132,14 @@ const questionsAnswers = (req, res) => {
             answers : []
           }
 
-          // for (const questionData of questions[question]) {
             let answers = _.groupBy(questions[question],'idanswer');
 
             for (const answerskey in answers) {
               for (const answer of answers[answerskey]) {
                 
                 let answerDto = {
-                  answerId:answer.idanswer
+                  answerId:answer.idanswer,
+                  answer:answer.answer
                 }
 
                 quetionDto.answers.push(answerDto);
@@ -147,11 +147,9 @@ const questionsAnswers = (req, res) => {
               }
             }
             
-          // }
-
           quetionsDtso.push(quetionDto)
         }
-        console.log(quetionsDtso);
+        res.status(200).json(quetionsDtso)
        
       }else{
         console.log(err);
@@ -163,7 +161,7 @@ const questionsAnswers = (req, res) => {
 };
 
 // Search Exam
-//@Route /exam/serach-exam
+//@Route POST /exam/serach-exam
 const searchExam = (req, res) => {
   const searchExam = req.body.searchText;
   console.log(searchExam);

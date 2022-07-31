@@ -16,7 +16,7 @@ export default function ExamTable({tableData}) {
                     return(
                       <tr key={index}>
                       <td>{data.question}</td>
-                      <td>1. {data.answers[0]} 2. {data.answers[1]} 3. {data.answers[2]} 4. {data.answers[3]} </td>
+                      <td>1. {data.answers[0].answer} 2. {data.answers[1].answer} 3. {data.answers[2].answer} 4. {data.answers[3].answer} </td>
                     </tr>
                     )
                   })}

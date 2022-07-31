@@ -43,9 +43,7 @@ const Login = () => {
       username: email,
       password: password,
     }).then((respose) =>{
-        if(respose.data.message){
-          toast.error(respose.data.message)
-        }else{
+        if(!respose.data.message){
           console.log(respose.data)
           localStorage.setItem('user', JSON.stringify(respose.data))
           const userType = respose.data[0].user_type
@@ -54,6 +52,8 @@ const Login = () => {
           }else{
             navigate('/teacher-exams')
           }
+        }else{
+          toast.error(respose.data.message)
         }
     })
   };

@@ -119,7 +119,20 @@ export const AddNewExam = () => {
                 initialValues={{
                   question: "",
                   correctAnswer: "",
-                  answers: ["", "", "", ""],
+                  answers: [{
+                    idanswer: '',
+                    answer: '',
+                  }, {
+                    idanswer: '',
+                    answer: '',
+                  }, 
+                  {
+                    idanswer: '',
+                    answer: '',
+                  }, {
+                    idanswer: '',
+                    answer: '',
+                  }],
                 }}
                 onSubmit={(value, { resetForm }) => {
                   console.log(value);
@@ -158,7 +171,7 @@ export const AddNewExam = () => {
                         <Col>
                           <Field
                             id="answer1"
-                            name="answers[0]"
+                            name="answers[0].answer"
                             type="text"
                             placeholder="Answer 1"
                             required="required"
@@ -179,7 +192,7 @@ export const AddNewExam = () => {
                         <Col>
                           <Field
                             id="answer2"
-                            name="answers[1]"
+                            name="answers[1].answer"
                             type="text"
                             placeholder="Answer 2"
                             required="required"
@@ -200,7 +213,7 @@ export const AddNewExam = () => {
                         <Col>
                           <Field
                             id="answer3"
-                            name="answers[2]"
+                            name="answers[2].answer"
                             type="text"
                             placeholder="Answer 3"
                             required="required"
@@ -221,7 +234,7 @@ export const AddNewExam = () => {
                         <Col>
                           <Field
                             id="answer4"
-                            name="answers[3]"
+                            name="answers[3].answer"
                             type="text"
                             placeholder="Answer 4"
                             required="required"

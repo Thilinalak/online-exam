@@ -11,6 +11,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import { ToastContainer } from "react-toastify";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
+import StudentSingleExamView from "./StudentSingleExamView";
 
 function App() {
   return (
@@ -29,6 +30,9 @@ function App() {
         </div>
       </MuiPickersUtilsProvider>
     </Router>
+    // <>
+    // <StudentSingleExamView/>
+    // </>
   );
 }
 
