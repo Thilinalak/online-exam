@@ -4,13 +4,18 @@ import {FaSignOutAlt,IoChevronBackCircle } from 'react-icons/fa'
 import {Navbar,Container, Nav, NavDropdown} from 'react-bootstrap'
 
 export const Header = () => {
+
+  const signOut = ()=>{
+    localStorage.removeItem('user')
+  }
+
   return (
     <Navbar bg="primary" variant="dark">
     <Container>
     <Navbar.Brand href="#home"><ArrowBackIcon/> Back</Navbar.Brand>
     <Nav className="justify-content-end">
     <NavDropdown title="SignOut" id="collasible-nav-dropdown">
-        <NavDropdown.Item href="/"><FaSignOutAlt/> SignOut</NavDropdown.Item>
+        <NavDropdown.Item onClick={signOut} href="/"><FaSignOutAlt/> SignOut</NavDropdown.Item>
         
       </NavDropdown>
     </Nav>

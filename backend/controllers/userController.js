@@ -50,7 +50,15 @@ const loginUser = (req, res) => {
       if (result.length > 0) {
         bcrtpt.compare(password, result[0].password, (error, reslt) => {
           if(reslt){
-            res.status(200).send(result);
+            if(result[0].user_type === 'teacher'){
+              db.query(`SELECT * FROM teacher WHERE user_credentials_id = ${result[0].iduser_login}`,(err, user)=>{
+                  res.status(200).json({user: user, userType: result[0].user_type});
+              })
+            }else{
+              db.query(`SELECT * FROM student WHERE user_credentials_id = ${result[0].iduser_login}`,(err, user)=>{
+                res.status(200).json({user: user, userType: result[0].user_type});
+            })
+            }
           }else{
             res.json({ message: "Invalid User Credentials" });
           }

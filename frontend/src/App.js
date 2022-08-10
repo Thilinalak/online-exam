@@ -5,10 +5,11 @@ import { MonitorStartedExam } from "./pages/teacher/MonitorStartedExam";
 import { Exams as StudentExam } from "./pages/student/Exams";
 import { AddNewExam } from "./pages/teacher/AddNewExam";
 import { ExamResults } from "./pages/student/ExamResults";
-import { SingleExam } from "./pages/student/SingleExam";
+import SingleExam from "./pages/student/SingleExam";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { ToastContainer } from "react-toastify";
+import Timer from "./components/Timer";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import StudentSingleExamView from "./StudentSingleExamView";
@@ -31,7 +32,8 @@ function App() {
       </MuiPickersUtilsProvider>
     </Router>
     // <>
-    // <StudentSingleExamView/>
+    //  <Timer/>
+
     // </>
   );
 }

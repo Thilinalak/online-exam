@@ -8,7 +8,9 @@ export const Exams = () => {
 
   const [examData, setExamData] = useState([]);
 
+  const userr = JSON.parse(localStorage.getItem("user"));
   useEffect(() => {
+    userr ? console.log() : navigate('/')
     axios.get("http://localhost:5000/exam/student-view-exams")
     .then((res) => {
       setExamData(res.data);

@@ -13,6 +13,7 @@ import { Formik, Form as FormikForm, Field } from "formik";
 import axios from "axios";
 
 export const AddNewExam = () => {
+  
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedDateTime, setSelectedDataTime] = useState(new Date());
@@ -21,20 +22,20 @@ export const AddNewExam = () => {
   const [currentUser, setCurrentUser] = useState([]);
   const [tableData, setTableData] = useState([]);
 
+  
+  const userr = JSON.parse(localStorage.getItem("user"));
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
-      setCurrentUser(user);
-    }
+    userr ? console.log() : navigate('/')
     const examID = location?.state?.examid
     setExamName(location?.state?.examname)
     setSelectedDataTime(location?.state?.datetime)
     setDuration(location?.state?.duration)
 
-    axios.get(`http://localhost:5000/exam/questions-answers/${examID}`)
+     axios.get(`http://localhost:5000/exam/questions-answers/${examID}`)
     .then((res) => {
       console.log('QA RES',res.data);
-    })
+    }) 
+    
   }, []);
 
  

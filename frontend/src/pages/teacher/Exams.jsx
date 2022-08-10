@@ -7,8 +7,12 @@ import axios from "axios";
 export const Exams = () => {
   const [examData, setExamData] = useState([]);
   const [searchText, setSearchText] = useState('');
+  const navigate = useNavigate();
 
+  const userr = JSON.parse(localStorage.getItem("user"));
   useEffect(() => {
+    userr ? console.log() : navigate('/')
+    
     axios.get("http://localhost:5000/exam/teacher-view-exams").then((res) => {
       setExamData(res.data);
     });
@@ -22,7 +26,6 @@ export const Exams = () => {
     })
   }
 
-  const navigate = useNavigate();
   // const route = useRoutes()
   return (
     <>

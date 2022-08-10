@@ -79,7 +79,7 @@ const saveAnswers = (questionID, answers) => {
 };
 
 // Teacher View Exams
-//@Route GET /exam/teacher-view-exam
+// @Route GET /exam/teacher-view-exam
 const teacherViewExams = (req, res) => {
   db.query(
     "SELECT idexam, exam_name,datetime,duration, last_updated, status FROM exam WHERE teacher_idteacher = ?",
@@ -92,26 +92,14 @@ const teacherViewExams = (req, res) => {
 
 
 // Publish exam
-// @Route PUT /exam/add-new-exam
+// @Route PUT /exam/publish-exam/:id
 const pubishExam = (req, res) =>{
-  console.log('got the request');
+  console.log('got the ID ' ,req.params.id);
 }
 
 
-
-// Student View Exams
-// @Route GET /exam/student-view-exam
-const studentViewExams = (req, res) => {
-  db.query(
-    `SELECT idexam, exam_name, datetime , duration , isAttended FROM exam WHERE student_status = ${true} AND isPublished = ${true}`,
-    (err, result) => {
-      !err ? res.send(result) : console.log(err);
-    }
-  );
-};
-
 // GET Questions and answers
-//@Route GET /exam/questions-answers
+//@Route GET /exam/questions-answers/:id
 const questionsAnswers = (req, res) => {
   const examID = req.params.id;
   db.query(`SELECT q.*, a.* FROM question q
@@ -174,12 +162,12 @@ const searchExam = (req, res) => {
   );
 };
 
+
 module.exports = {
   addNewExam,
   teacherViewExams,
   questionsAnswers,
   searchExam,
-  studentViewExams,
   pubishExam,
 };
 

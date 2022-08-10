@@ -8,19 +8,14 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  // const {user, isSuccess, isError, message} = useSelector((state) => state.auth)
-  // const userr = JSON.parse(localStorage.getItem("user"));
-
-  // useEffect(()=>{
-  //   if(isError){
-  //     console.log('ERROR');
-  //     toast.error(message)
-  //   }
-  //   if(isSuccess){
-  //     console.log('Success');
-  //     // navigate('/student-exams')
-  //   }
-  // },[user, isError, isSuccess, message, navigate, dispatch])
+  const userr = JSON.parse(localStorage.getItem("user"));
+  useEffect(()=>{
+    if(userr){
+      userr.userType === 'student' ? navigate('/student-exams') : navigate('/teacher-exams')
+    }else{
+      navigate('/')
+    }
+  },[userr])
 
   const [loginData, setLoginData] = useState({
     email: "",
@@ -44,10 +39,9 @@ const Login = () => {
       password: password,
     }).then((respose) =>{
         if(!respose.data.message){
-          console.log(respose.data)
+          console.log('userDD', respose.data)
           localStorage.setItem('user', JSON.stringify(respose.data))
-          const userType = respose.data[0].user_type
-          if(userType === 'student'){
+          if(respose.data.userType === 'student'){
             navigate('/student-exams')
           }else{
             navigate('/teacher-exams')
