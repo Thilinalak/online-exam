@@ -1,6 +1,7 @@
 import { Button, Row, Col, Form, Card, Container } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect, useCallback } from "react";
+import { toast } from "react-toastify";
 import axios from "axios";
 import Timer from "../../components/Timer";
 import "../../App.css";
@@ -21,7 +22,7 @@ function SingleExam ()  {
   const [duration, setDuration] = useState("");
   const [examName, setExamName] = useState("");
   const [examID, setExamID] = useState();
-const [currentUserID, setCurrentUserID] = useState()
+const [studentID, setStudentID] = useState()
   const [questions, setQuestions] = useState([]);
   const [count, setCount] = useState(0);
   const location = useLocation();
@@ -29,17 +30,21 @@ const [currentUserID, setCurrentUserID] = useState()
 
   const [, updateState] = useState();
   const forceUpdate = useCallback(() => updateState({}), []);
-  const userr = JSON.parse(localStorage.getItem("user"));
+  // const userr = JSON.parse(localStorage.getItem("user"));
+
   useEffect(() => {
+  const userr = JSON.parse(localStorage.getItem("user"));
 
     userr ? console.log() : navigate('/')
+
     const exmID = location?.state?.examid;
+    const stID = userr.user[0].idstudent
     setExamID(exmID)
-    setCurrentUserID(userr.user[0].idstudent)
+    setStudentID(userr.user[0].idstudent)
     setExamName(location?.state?.examname);
     setDuration(location?.state?.duration);
     axios
-      .get(`http://localhost:5000/exam/questions-answers/${exmID}`)
+      .get(`http://localhost:5000/exam/student/questions-answers/?examID=${exmID}&studentID=${stID}`)
       .then((res) => {
         console.log("response ", res.data);
         setQuestions(res.data);
@@ -64,15 +69,35 @@ const [currentUserID, setCurrentUserID] = useState()
   };
 
   const onSave = () =>{
-    axios.post(`http://localhost:5000/exam/student-save-exam`,{
-      examID , currentUserID, questions
+
+    axios.post(`http://localhost:5000/exam/student/save-exam`,{
+      examID , studentID, questions
     })
     .then((res) => {
-
+      res.status === 200 ? navigate('/student-exams') : console.log('bad response');
+      
     })
   }
   const onComplete = () =>{
 
+
+    let totalQuestions = questions.length
+    let givenAnswers = []
+    questions.map(q =>{
+      q.correctAnswer !== undefined ? givenAnswers.push(q.correctAnswer) : console.log() 
+    })
+    if(givenAnswers.length === totalQuestions ){
+      axios.post(`http://localhost:5000/exam/student/save-exam`,{
+      examID , studentID, questions
+    })
+    .then((res) => {
+      res.status === 200 ? navigate('/student-exam-result') : console.log('bad response');
+    })
+    }else{
+      toast.error('Before Press Complete, You Must Answer To the All Questions')
+    }
+
+   
   }
 
   return (
@@ -137,7 +162,7 @@ const [currentUserID, setCurrentUserID] = useState()
                     Prev
                   </Button>
                 </Col>
-                <Col className="text-center fw-bold">Question 1</Col>
+                <Col className="text-center fw-bold">Question {count+1}</Col>
                 <Col>
                   <div className="float-end">
                     <Button
@@ -160,7 +185,7 @@ const [currentUserID, setCurrentUserID] = useState()
         <Row>
           <Col>
             <Button onClick={onSave} variant="success">Save</Button>{" "}
-            <Button variant="info">Complete</Button>
+            <Button onClick={onComplete}variant="info">Complete</Button>
           </Col>
         </Row>
       </div>

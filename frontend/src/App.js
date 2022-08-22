@@ -23,6 +23,7 @@ function App() {
             <Route path="/" element={<Login />} />
             <Route path="/teacher-exams" element={<TeacherExams />} />
             <Route path="/student-exams" element={<StudentExam />} />
+            <Route path="/student-exam-result" element={<ExamResults />} />
             <Route path="/add-new-exam" element={<AddNewExam />} />
             <Route path="/Monitor-Started-Exam" element={<MonitorStartedExam />} />
             <Route path="/student-single-exam" element={<SingleExam />} />
