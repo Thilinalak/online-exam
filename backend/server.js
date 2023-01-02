@@ -11,7 +11,7 @@ app.use(cors())
 app.use(bodyParser.urlencoded({extended: true}))
 
 app.use('/api/users', require('./routes/userRoutes'))
-// app.use('/exam', require('./routes/teacherExamRoutes'))
+app.use('/exam', require('./routes/teacherExamRoutes'))
 app.use('/exam/student', require('./routes/studentExamRoutes'))
 
 

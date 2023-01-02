@@ -1,6 +1,7 @@
 const dbConfig = require("../config/dbConfig");
 const mysql = require("mysql2");
-const _ = require("lodash")
+const _ = require("lodash");
+const { result } = require("lodash");
 
 const db = mysql.createConnection({
   host: dbConfig.HOST,
@@ -25,7 +26,6 @@ const addNewExam = (req, res) => {
           last_updated: lastUpdatedDateTime,
           datetime: selectedDateTime,
           duration: duration,
-          student_status: false,
           isPublished: false,
           teacher_idteacher: result[0].idteacher,
           status: true
@@ -34,7 +34,7 @@ const addNewExam = (req, res) => {
         db.query("INSERT INTO exam SET ?", examData, (err, result) => {
           if (!err) {
             saveQuestions(result.insertId, tableData);
-            res.status(200);
+            res.status(200).json({message :'SUCCESS'});
           } else {
             console.log(err);
           }
@@ -79,11 +79,10 @@ const saveAnswers = (questionID, answers) => {
 };
 
 // Teacher View Exams
-// @Route GET /exam/teacher-view-exam
+// @Route GET /exam/teacher-view-exam/:id
 const teacherViewExams = (req, res) => {
   db.query(
-    "SELECT idexam, exam_name,datetime,duration, last_updated, status FROM exam WHERE teacher_idteacher = ?",
-    [1],
+    `SELECT * FROM exam WHERE teacher_idteacher = ${req.params.id}`,
     (err, result) => {
       !err ? res.send(result) : console.log(err);
     }
@@ -91,17 +90,12 @@ const teacherViewExams = (req, res) => {
 };
 
 
-// Publish exam
-// @Route PUT /exam/publish-exam/:id
-const pubishExam = (req, res) =>{
-  console.log('got the ID ' ,req.params.id);
-}
-
-
 // GET Questions and answers
 //@Route GET /exam/questions-answers/:id
 const questionsAnswers = (req, res) => {
   const examID = req.params.id;
+
+  console.log('asdsadsssa ',examID);
   db.query(`SELECT q.*, a.* FROM question q
     JOIN answers a ON
     q.question_id = a.aquestion_id WHERE q.exam_id = ${examID}`,
@@ -162,13 +156,97 @@ const searchExam = (req, res) => {
   );
 };
 
+// @Desc    send info to monitorStartedExam page
+// @Method  GET
+// @Route   /exam//monitor-started-exam/
+const monitorStartedExam = (req, res)=>{
+    const examID = req.query.examid
+
+    let responseObj = {
+      total_Students : 0,
+      examCompletedStudents : 0,
+      attendingList: []
+    }
+
+    db.query(`SELECT(SELECT COUNT(*) FROM   student) AS Total_Students,
+    (SELECT COUNT(*)  FROM   student_exam WHERE exam_id= ${examID} AND isExamComplete=${true}) AS examCompletedStudents FROM dual`,(err, result)=>{
+      if(!err){
+        responseObj.total_Students = result[0].Total_Students 
+        responseObj.examCompletedStudents = result[0].examCompletedStudents 
+      }else{
+        console.log(err);
+      }
+    })
+
+    db.query(`SELECT student_id, isExamComplete FROM student_exam WHERE exam_id =${examID} `,(err, student_examResult) =>{
+      if(!err){
+        student_examResult.map((se) =>{
+          db.query(`SELECT f_name, l_name FROM student WHERE idstudent = ${se.student_id}`,(error, resultt) =>{
+            if(!error){
+              responseObj.attendingList.push({
+                studentName: resultt[0].f_name +" "+ resultt[0].l_name,
+                completeStatus : se.isExamComplete === 1 ? "Complete" : "Pending"
+              })
+            }else{
+                console.log(error);
+            }
+          })
+        })
+      }else{
+        console.log(err);
+      }
+      
+    })
+    db.query(`SELECT f_name, l_name FROM student WHERE idstudent NOT IN (SELECT student_id FROM student_exam WHERE exam_id = ${examID})`,(errr, reslt) =>{
+      if(!errr){
+        if(reslt.length > 0){
+          reslt.map((student)=>{
+            responseObj.attendingList.push({
+              studentName: student.f_name +" "+ student.l_name,
+                completeStatus : "Pending"
+            })
+          })
+        }
+      }else{
+        console.log(errr);
+
+      }
+    })
+
+    setTimeout(()=>{
+      res.status(200).json({resObj:responseObj})
+    },1000)
+ 
+}
+
+// @Desc    Publish exam
+// @Method  PUT
+// @Route   /exam/exam-publish/:id
+const publishExam = (req, res) =>{
+  const examID = req.params.id
+  db.query(`UPDATE exam SET isPublished=${true} WHERE idexam=${examID}`,(err, result)=>{
+    !err ? res.status(200).json({message: 'OK'}) : console.log(err);
+  })
+}
+
+// @Desc    Teacher end exam 
+// @Method  PUT
+// @Route   /exam//end-exam/:id
+const endExam = (req, res)=>{
+  
+  db.query(`UPDATE exam SET isPublished=${false} WHERE idexam=${req.params.id}`,(err, result)=>{
+    !err ? res.status(200).json({message: 'OK'}) : console.log(err)
+  })
+}
 
 module.exports = {
   addNewExam,
   teacherViewExams,
   questionsAnswers,
   searchExam,
-  pubishExam,
+  publishExam,
+  monitorStartedExam,
+  endExam,
 };
 
 

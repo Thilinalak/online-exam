@@ -12,8 +12,7 @@ export const Exams = () => {
   const userr = JSON.parse(localStorage.getItem("user"));
   useEffect(() => {
     userr ? console.log() : navigate('/')
-    
-    axios.get("http://localhost:5000/exam/teacher-view-exams").then((res) => {
+    axios.get(`http://localhost:5000/exam/teacher-view-exams/${userr.user[0].idteacher}`).then((res) => {
       setExamData(res.data);
     });
   }, []);
@@ -75,22 +74,22 @@ export const Exams = () => {
                   return (
                   <tr key={index} onClick={() => {
                     {console.log(exam)}
-                    exam.status === 1 ? navigate('/add-new-exam',{state:{
+                    exam.isPublished === 0 ? navigate('/add-new-exam',{state:{
                       examid: exam.idexam,
                       examname: exam.exam_name,
                       datetime: exam.datetime,
                       exduration: exam.duration
-                    }}) : navigate("/Monitor-Started-Exam",{examID : exam.idexam})
+                    }}) : navigate("/Monitor-Started-Exam",{state:{examinfo : exam}})
                   }}>
                       <td>{exam.idexam}</td>
                       <td>{exam.exam_name}</td>
                       <td>{exam.datetime}</td>
                       <td>{exam.last_updated}</td>
                       <td>
-                        {exam.status === 1 ? (
+                        {exam.isPublished !== 1 ? (
                           <div>Draft</div>
                         ) : (
-                          <div>Pending</div>
+                          <div>Published</div>
                         )}
                       </td>
                     </tr>
