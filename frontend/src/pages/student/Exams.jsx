@@ -44,7 +44,7 @@ export const Exams = () => {
           exdatetime: exam.datetime,
         }})
       }else{
-        toast.error("Please wait for till the Exam Start Time")
+        toast.error("Please wait for untill the Exam Start Time")
       }
     
   }else{ 

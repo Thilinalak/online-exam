@@ -34,22 +34,28 @@ const Login = () => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    axios.post('http://localhost:5000/api/users/login', {
-      username: email,
-      password: password,
-    }).then((respose) =>{
-        if(!respose.data.message){
-          console.log('userDD', respose.data)
-          localStorage.setItem('user', JSON.stringify(respose.data))
-          if(respose.data.userType === 'student'){
-            navigate('/student-exams')
+    if( !(email === '' || password === '') ){
+      axios.post('http://localhost:5000/api/users/login', {
+        username: email,
+        password: password,
+      }).then((respose) =>{
+          if(!respose.data.message){
+            console.log('userDD', respose.data)
+            localStorage.setItem('user', JSON.stringify(respose.data))
+            if(respose.data.userType === 'student'){
+              navigate('/student-exams')
+            }else{
+              navigate('/teacher-exams')
+            }
           }else{
-            navigate('/teacher-exams')
+            toast.error(respose.data.message)
           }
-        }else{
-          toast.error(respose.data.message)
-        }
-    })
+      })
+    }else{
+      toast.error('Both fields are Required !')
+    }
+
+    
   };
 
   return (
